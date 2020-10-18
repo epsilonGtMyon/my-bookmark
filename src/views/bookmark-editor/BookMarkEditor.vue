@@ -42,10 +42,18 @@ import {
 } from "@ionic/vue";
 import { computed, defineComponent, onMounted, reactive } from "vue";
 
+import { Bookmark } from "@/storage/entity/Bookmark";
+import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
+import { useRouter } from "vue-router";
+
+//---------------
+
 type DataType = {
   titleText: string;
   urlText: string;
 };
+
+const bookmarkRepository = new BookmarkRepository();
 
 export default defineComponent({
   name: "BookMarkEditor",
@@ -62,14 +70,22 @@ export default defineComponent({
     IonButton,
   },
   setup() {
+    const router = useRouter();
     const state = reactive<DataType>({
       titleText: "",
       urlText: "",
     });
 
-    const register = () => {
-      //
-      console.log(state);
+    const register = async () => {
+      const bookmark: Bookmark = {
+        id: null,
+        title: state.titleText,
+        url: state.urlText,
+      };
+
+      await bookmarkRepository.add(bookmark);
+
+      router.back();
     };
 
     onMounted(() => {
