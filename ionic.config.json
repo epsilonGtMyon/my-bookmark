@@ -1,0 +1,7 @@
+{
+  "name": "my-bookmark",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
