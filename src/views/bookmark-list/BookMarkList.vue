@@ -8,8 +8,11 @@
 
     <ion-content>
       <ion-list>
-        <template v-for="bookmark in state.bookmarkRecords" :key="bookmark.id">
-          <ion-item>{{ bookmark.title }}</ion-item>
+        <template
+          v-for="(bookmark, index) in state.bookmarkRecords"
+          :key="bookmark.id"
+        >
+          <ion-item @click="toEditor(index)">{{ bookmark.title }}</ion-item>
         </template>
       </ion-list>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -63,9 +66,17 @@ export default defineComponent({
     IonIcon,
   },
   setup() {
+    const router = useRouter();
     const state = reactive<DataType>({
       bookmarkRecords: [],
     });
+
+    const toEditor = (index: number) => {
+      const bookmarkRecord = state.bookmarkRecords[index];
+      const id = bookmarkRecord.id;
+
+      router.push("/bookmark-editor");
+    };
 
     onMounted(async () => {
       const records = await bookmarkRepository.findAll();
@@ -75,6 +86,7 @@ export default defineComponent({
     return {
       state,
       add,
+      toEditor,
     };
   },
 });
