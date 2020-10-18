@@ -2,6 +2,9 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button default-href="/"></ion-back-button>
+        </ion-buttons>
         <ion-title> ブックマーク登録 </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -38,13 +41,15 @@ import {
   IonItem,
   IonLabel,
   IonInput,
+  IonButtons,
   IonButton,
+  IonBackButton,
 } from "@ionic/vue";
 import { computed, defineComponent, onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
 import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
-import { useRouter } from "vue-router";
 
 //---------------
 
@@ -67,7 +72,9 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonInput,
+    IonButtons,
     IonButton,
+    IonBackButton,
   },
   setup() {
     const router = useRouter();
