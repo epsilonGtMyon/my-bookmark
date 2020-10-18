@@ -6,14 +6,24 @@ const { Storage } = Plugins;
 const tableKey = "bookmark";
 
 class BookmarkRepository {
+  /**
+   * 追加します。
+   * @param entity
+   */
   public async add(entity: Bookmark) {
     entity.id = uuidv4();
 
-    const records = await this.extract();
+    const records = await this.extract<Bookmark>();
     records.push(entity);
 
-    await this.persist(records);
+    await this.persist<Bookmark>(records);
   }
+
+  async findAll() {
+    return await this.extract<Bookmark>();
+  }
+
+  //---------------------------
 
   private async extract<T>() {
     const jsonString = (await Storage.get({ key: tableKey }))?.value;

@@ -7,6 +7,11 @@
     </ion-header>
 
     <ion-content>
+      <ion-list>
+        <template v-for="bookmark in state.bookmarkRecords" :key="bookmark.id">
+          <ion-item>{{ bookmark.title }}</ion-item>
+        </template>
+      </ion-list>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button router-link="/bookmark-editor">
           <ion-icon :icon="add"></ion-icon>
@@ -24,12 +29,24 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
+  IonList,
+  IonItem,
   IonFab,
   IonFabButton,
   IonIcon,
 } from "@ionic/vue";
 import { add } from "ionicons/icons";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+
+import { Bookmark } from "@/storage/entity/Bookmark";
+import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
+
+type DataType = {
+  bookmarkRecords: Bookmark[];
+};
+
+const bookmarkRepository = new BookmarkRepository();
 
 export default defineComponent({
   name: "BookMarkList",
@@ -39,12 +56,24 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
     IonContent,
+    IonList,
+    IonItem,
     IonFab,
     IonFabButton,
     IonIcon,
   },
   setup() {
+    const state = reactive<DataType>({
+      bookmarkRecords: [],
+    });
+
+    onMounted(async () => {
+      const records = await bookmarkRepository.findAll();
+      state.bookmarkRecords = records;
+    });
+
     return {
+      state,
       add,
     };
   },
