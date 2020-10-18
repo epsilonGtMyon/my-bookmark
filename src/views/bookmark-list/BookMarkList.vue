@@ -65,8 +65,14 @@ export default defineComponent({
     IonFabButton,
     IonIcon,
   },
+  // methods: {
+  //   ionViewDidEnter() {
+  //     console.log(this);
+  //   },
+  // },
   setup() {
     const router = useRouter();
+
     const state = reactive<DataType>({
       bookmarkRecords: [],
     });
@@ -75,14 +81,13 @@ export default defineComponent({
       const bookmarkRecord = state.bookmarkRecords[index];
       const id = bookmarkRecord.id;
 
-      router.push("/bookmark-editor");
+      router.push({ path: "/bookmark-editor", query: { id } });
     };
 
     onMounted(async () => {
       const records = await bookmarkRepository.findAll();
       state.bookmarkRecords = records;
     });
-
     return {
       state,
       add,

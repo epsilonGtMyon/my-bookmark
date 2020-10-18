@@ -46,7 +46,7 @@ import {
   IonBackButton,
 } from "@ionic/vue";
 import { computed, defineComponent, onMounted, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
 import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
@@ -78,6 +78,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const state = reactive<DataType>({
       titleText: "",
       urlText: "",
@@ -95,9 +96,15 @@ export default defineComponent({
       router.back();
     };
 
-    onMounted(() => {
-      state.titleText = "title init";
-      state.urlText = "url init";
+    onMounted(async () => {
+      const id = route.query.id as string | null;
+      if (id != null) {
+        const bookmark = await bookmarkRepository.findById(id);
+        if (bookmark != null) {
+          state.titleText = bookmark.title;
+          state.urlText = bookmark.url;
+        }
+      }
     });
 
     const hasEmptyInput = computed(() => {

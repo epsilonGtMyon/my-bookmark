@@ -19,6 +19,18 @@ class BookmarkRepository {
     await this.persist<Bookmark>(records);
   }
 
+  /**
+   * IDを指定して取得します。
+   * @param id
+   */
+  async findById(id: string) {
+    const records = await this.extract<Bookmark>();
+    return records.find((x) => x.id === id);
+  }
+
+  /**
+   * 全件取得します。
+   */
   async findAll() {
     return await this.extract<Bookmark>();
   }
