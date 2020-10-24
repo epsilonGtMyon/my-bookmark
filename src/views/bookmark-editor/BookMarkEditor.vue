@@ -28,11 +28,13 @@
         :disabled="hasEmptyInput"
       >
         登録
+        <ion-icon :icon="createOutline" slot="end"></ion-icon>
       </ion-button>
 
       <template v-if="isDeletable">
         <ion-button color="danger" @click="confirmDeleteBookmark">
           削除
+          <ion-icon :icon="trash" slot="end"></ion-icon>
         </ion-button>
       </template>
     </ion-content>
@@ -54,8 +56,10 @@ import {
   IonButtons,
   IonButton,
   IonBackButton,
+  IonIcon,
   alertController,
 } from "@ionic/vue";
+import { createOutline, trash } from "ionicons/icons";
 import { computed, defineComponent, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -87,6 +91,7 @@ export default defineComponent({
     IonButtons,
     IonButton,
     IonBackButton,
+    IonIcon,
   },
   setup() {
     const router = useRouter();
@@ -165,6 +170,9 @@ export default defineComponent({
 
     return {
       state,
+      //----------
+      createOutline,
+      trash,
       //----------
       hasEmptyInput,
       isDeletable,
