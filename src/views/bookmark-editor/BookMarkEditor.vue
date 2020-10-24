@@ -110,12 +110,16 @@ export default defineComponent({
 
     const registerBookmark = async () => {
       const bookmark: Bookmark = {
-        id: null,
+        id: state.id,
         title: state.titleText,
         url: state.urlText,
       };
 
-      await bookmarkRepository.add(bookmark);
+      if (bookmark.id === "") {
+        await bookmarkRepository.add(bookmark);
+      } else {
+        await bookmarkRepository.modify(bookmark);
+      }
 
       router.back();
     };

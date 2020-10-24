@@ -23,6 +23,24 @@ class BookmarkRepository {
 
     await this.storageHelper.persist(records);
   }
+  
+
+  /**
+   * 変更します。
+   * @param entity 
+   */
+  async modify(entity: Bookmark) {
+    const records = await this.storageHelper.extract();
+
+    for (let i = 0; i < records.length; i++) {
+      if (records[i].id === entity.id) {
+        records[i] = entity;
+        break;
+      }
+    }
+
+    await this.storageHelper.persist(records);
+  }
 
   /**
    * IDを指定して取得します。
