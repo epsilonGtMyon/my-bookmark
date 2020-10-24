@@ -14,13 +14,13 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/bookmark-list",
-    name: "BookMarkList",
-    component: () => import("@/views/bookmark-list/BookMarkList.vue"),
+    name: "BookmarkList",
+    component: () => import("@/views/bookmark-list/BookmarkList.vue"),
   },
   {
     path: "/bookmark-editor",
-    name: "BookMarkEditor",
-    component: () => import("@/views/bookmark-editor/BookMarkEditor.vue"),
+    name: "BookmarkEditor",
+    component: () => import("@/views/bookmark-editor/BookmarkEditor.vue"),
   },
 ];
 
