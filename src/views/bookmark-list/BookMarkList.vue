@@ -65,11 +65,6 @@ export default defineComponent({
     IonFabButton,
     IonIcon,
   },
-  // methods: {
-  //   ionViewDidEnter() {
-  //     console.log(this);
-  //   },
-  // },
   setup() {
     const router = useRouter();
 
@@ -84,13 +79,17 @@ export default defineComponent({
       router.push({ path: "/bookmark-editor", query: { id } });
     };
 
-    onMounted(async () => {
+    const ionViewWillEnter = async () => {
       const records = await bookmarkRepository.findAll();
       state.bookmarkRecords = records;
-    });
+    };
+
     return {
       state,
+      //------
       add,
+      //------
+      ionViewWillEnter,
       toEditor,
     };
   },
