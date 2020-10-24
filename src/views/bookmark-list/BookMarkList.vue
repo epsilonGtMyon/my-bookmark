@@ -12,7 +12,17 @@
           v-for="(bookmark, index) in state.bookmarkRecords"
           :key="bookmark.id"
         >
-          <ion-item @click="toEditor(index)">{{ bookmark.title }}</ion-item>
+          <ion-item @click="toEditor(index)">
+            {{ bookmark.title }}
+            <ion-button
+              slot="end"
+              color="primary"
+              @click.stop="openUrl(bookmark.url)"
+            >
+              開く
+              <ion-icon :icon="browsersOutline"></ion-icon>
+            </ion-button>
+          </ion-item>
         </template>
       </ion-list>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -26,6 +36,7 @@
 
 
 <script lang="ts">
+import { Plugins } from "@capacitor/core";
 import {
   IonPage,
   IonHeader,
@@ -34,16 +45,19 @@ import {
   IonContent,
   IonList,
   IonItem,
+  IonButton,
   IonFab,
   IonFabButton,
   IonIcon,
 } from "@ionic/vue";
-import { add } from "ionicons/icons";
+import { add, browsersOutline } from "ionicons/icons";
 import { defineComponent, onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
 import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
+
+const { App, Browser } = Plugins;
 
 type DataType = {
   bookmarkRecords: Bookmark[];
@@ -61,6 +75,7 @@ export default defineComponent({
     IonContent,
     IonList,
     IonItem,
+    IonButton,
     IonFab,
     IonFabButton,
     IonIcon,
@@ -78,6 +93,12 @@ export default defineComponent({
 
       router.push({ path: "/bookmark-editor", query: { id } });
     };
+    const openUrl = async (url: string) => {
+      const v = await App.canOpenUrl({ url });
+      if (v.value) {
+        await Browser.open({ url });
+      }
+    };
 
     const ionViewWillEnter = async () => {
       const records = await bookmarkRepository.findAll();
@@ -88,9 +109,11 @@ export default defineComponent({
       state,
       //------
       add,
+      browsersOutline,
       //------
       ionViewWillEnter,
       toEditor,
+      openUrl,
     };
   },
 });
