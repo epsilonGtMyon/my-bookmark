@@ -2,6 +2,9 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button default-href="/"></ion-back-button>
+        </ion-buttons>
         <ion-title> ブックマーク一覧 </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -12,7 +15,7 @@
           v-for="(bookmark, index) in state.bookmarkRecords"
           :key="bookmark.id"
         >
-          <ion-item @click="toEditor(index)">
+          <ion-item button @click="toEditor(index)">
             {{ bookmark.title }}
             <ion-button
               slot="end"
@@ -45,7 +48,9 @@ import {
   IonContent,
   IonList,
   IonItem,
+  IonButtons,
   IonButton,
+  IonBackButton,
   IonFab,
   IonFabButton,
   IonIcon,
@@ -75,7 +80,9 @@ export default defineComponent({
     IonContent,
     IonList,
     IonItem,
+    IonButtons,
     IonButton,
+    IonBackButton,
     IonFab,
     IonFabButton,
     IonIcon,
