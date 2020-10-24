@@ -22,9 +22,19 @@
         </ion-item>
       </ion-list>
 
-      <ion-button color="primary" @click="register" :disabled="hasEmptyInput"
-        >登録</ion-button
+      <ion-button
+        color="primary"
+        @click="registerBookmark"
+        :disabled="hasEmptyInput"
       >
+        登録
+      </ion-button>
+
+      <template v-if="isDeletable">
+        <ion-button color="danger" @click="confirmDeleteBookmark">
+          削除
+        </ion-button>
+      </template>
     </ion-content>
   </ion-page>
 </template>
@@ -44,8 +54,9 @@ import {
   IonButtons,
   IonButton,
   IonBackButton,
+  alertController,
 } from "@ionic/vue";
-import { computed, defineComponent, onMounted, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
@@ -54,6 +65,7 @@ import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
 //---------------
 
 type DataType = {
+  id: string;
   titleText: string;
   urlText: string;
 };
@@ -79,12 +91,24 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
+
     const state = reactive<DataType>({
+      id: "",
       titleText: "",
       urlText: "",
     });
 
-    const register = async () => {
+    //-----------------------
+    //private
+
+    const deleteBookmark = async () => {
+      await bookmarkRepository.deleteById(state.id);
+
+      router.back();
+    };
+    //-----------------------
+
+    const registerBookmark = async () => {
       const bookmark: Bookmark = {
         id: null,
         title: state.titleText,
@@ -96,25 +120,54 @@ export default defineComponent({
       router.back();
     };
 
-    onMounted(async () => {
+    const confirmDeleteBookmark = async () => {
+      const alert = await alertController.create({
+        header: "確認",
+        message: "削除しますか？",
+        buttons: [
+          {
+            text: "Cancel",
+          },
+          {
+            text: "Ok",
+            handler: async () => {
+              await deleteBookmark();
+            },
+          },
+        ],
+      });
+      alert.present();
+    };
+
+    const ionViewWillEnter = async () => {
       const id = route.query.id as string | null;
       if (id != null) {
         const bookmark = await bookmarkRepository.findById(id);
         if (bookmark != null) {
+          state.id = bookmark.id ?? "";
           state.titleText = bookmark.title;
           state.urlText = bookmark.url;
         }
       }
-    });
+    };
 
     const hasEmptyInput = computed(() => {
       return state.titleText === "" || state.urlText === "";
     });
 
+    const isDeletable = computed(() => {
+      return state.id !== "";
+    });
+
     return {
       state,
-      register,
+      //----------
       hasEmptyInput,
+      isDeletable,
+      //----------
+      ionViewWillEnter,
+      registerBookmark,
+      confirmDeleteBookmark,
     };
   },
 });
