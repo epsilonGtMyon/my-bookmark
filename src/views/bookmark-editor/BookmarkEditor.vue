@@ -59,6 +59,7 @@ import {
   IonIcon,
   alertController,
   toastController,
+  loadingController,
 } from "@ionic/vue";
 import { createOutline, trash } from "ionicons/icons";
 import { computed, defineComponent, reactive } from "vue";
@@ -108,18 +109,25 @@ export default defineComponent({
     //private
 
     const deleteBookmark = async () => {
+      const loading = await loadingController.create({});
+      await loading.present();
       await bookmarkRepository.deleteById(state.id);
 
       const toast = await toastController.create({
         message: "削除しました",
         duration: 1500,
       });
-      toast.present();
+      await toast.present();
       router.back();
+
+      await loading.dismiss();
     };
     //-----------------------
 
     const registerBookmark = async () => {
+      const loading = await loadingController.create({});
+      await loading.present();
+
       const bookmark: Bookmark = {
         id: state.id,
         title: state.titleText,
@@ -138,6 +146,8 @@ export default defineComponent({
       });
       toast.present();
       router.back();
+
+      await loading.dismiss();
     };
 
     const confirmDeleteBookmark = async () => {
