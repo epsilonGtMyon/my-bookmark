@@ -16,8 +16,22 @@ ionic build
 ```
 
 
-android でビルドできるようにするために追加
+`android` でビルドできるようにするために追加(1回だけ)
 
 ```
 ionic cap add android
+```
+
+
+ネイティブディレクトリにコピー
+
+```
+ionic cap copy
+```
+
+
+`Android Studio` で開く
+
+```
+ionic cap open android
 ```
