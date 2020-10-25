@@ -56,13 +56,13 @@ import {
   IonIcon,
 } from "@ionic/vue";
 import { add, browsersOutline } from "ionicons/icons";
-import { defineComponent, onMounted, reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
 import { BookmarkRepository } from "@/storage/repository/BookmarkRepository";
 
-const { App, Browser } = Plugins;
+const { Browser } = Plugins;
 
 type DataType = {
   bookmarkRecords: Bookmark[];
