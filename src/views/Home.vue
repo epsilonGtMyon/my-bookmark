@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import { Plugins } from "@capacitor/core";
 import {
   IonContent,
   IonHeader,
@@ -30,8 +31,11 @@ import {
   IonToolbar,
   IonList,
   IonItem,
+  useBackButton,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
+
+const { App } = Plugins;
 
 export default defineComponent({
   name: "Home",
@@ -43,6 +47,11 @@ export default defineComponent({
     IonToolbar,
     IonList,
     IonItem,
+  },
+  setup() {
+    useBackButton(10, (processNextHandler) => {
+      App.exitApp();
+    });
   },
 });
 </script>
