@@ -101,10 +101,7 @@ export default defineComponent({
       router.push({ path: "/bookmark-editor", query: { id } });
     };
     const openUrl = async (url: string) => {
-      const v = await App.canOpenUrl({ url });
-      if (v.value) {
-        await Browser.open({ url });
-      }
+      await Browser.open({ url });
     };
 
     const ionViewWillEnter = async () => {
