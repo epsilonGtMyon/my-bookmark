@@ -32,6 +32,7 @@ import {
   IonList,
   IonItem,
   useBackButton,
+  useIonRouter,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 
@@ -49,8 +50,13 @@ export default defineComponent({
     IonItem,
   },
   setup() {
+    const ionRouter = useIonRouter();
     useBackButton(10, (processNextHandler) => {
-      App.exitApp();
+      if (ionRouter.canGoBack()) {
+        processNextHandler();
+      } else {
+        App.exitApp();
+      }
     });
   },
 });
