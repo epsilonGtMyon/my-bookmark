@@ -54,6 +54,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
+  loadingController,
 } from "@ionic/vue";
 import { add, browsersOutline } from "ionicons/icons";
 import { defineComponent, reactive } from "vue";
@@ -101,6 +102,11 @@ export default defineComponent({
       router.push({ path: "/bookmark-editor", query: { id } });
     };
     const openUrl = async (url: string) => {
+      const loading = await loadingController.create({
+        duration: 1000
+      });
+      await loading.present();
+      
       await Browser.open({ url });
     };
 
