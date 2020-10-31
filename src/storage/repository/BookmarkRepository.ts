@@ -23,11 +23,21 @@ class BookmarkRepository {
 
     await this.storageHelper.persist(records);
   }
-  
+
+  /**
+   * 全件総入れ替え
+   * @param entities
+   */
+  public async replaceAll(entities: Bookmark[]) {
+    if (entities.some((x) => x.id === null)) {
+      throw new Error("idが空のものを含んではいけません。");
+    }
+    await this.storageHelper.persist(entities);
+  }
 
   /**
    * 変更します。
-   * @param entity 
+   * @param entity
    */
   async modify(entity: Bookmark) {
     const records = await this.storageHelper.extract();
