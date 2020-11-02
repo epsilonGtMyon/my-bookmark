@@ -16,6 +16,12 @@ ionic build
 ```
 
 
+ネイティブ機能 使えるように(1回だけ)
+
+```
+ionic integrations enable capacitor
+```
+
 `android` でビルドできるようにするために追加(1回だけ)
 
 ```
