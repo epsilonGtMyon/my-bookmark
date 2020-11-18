@@ -42,6 +42,7 @@
                 v-if="state.disabledReorder"
                 slot="end"
                 color="primary"
+                style="margin-right: 2rem"
                 @click.stop="openUrl(bookmark.url)"
               >
                 開く
@@ -53,11 +54,13 @@
         </ion-reorder-group>
       </ion-list>
 
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button router-link="/bookmark-editor">
-          <ion-icon :icon="add"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
+      <template v-if="visibleAddButton">
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+          <ion-fab-button router-link="/bookmark-editor">
+            <ion-icon :icon="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </template>
     </ion-content>
   </ion-page>
 </template>
@@ -91,7 +94,7 @@ import {
   saveOutline,
   browsersOutline,
 } from "ionicons/icons";
-import { defineComponent, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 
 import { Bookmark } from "@/storage/entity/Bookmark";
@@ -170,6 +173,16 @@ export default defineComponent({
     };
 
     /**
+     * 新規追加のアイコン出すか？
+     * ソート中に出ると邪魔
+     */
+    const visibleAddButton = computed(() => {
+      //並び替え不可
+      //つまり通常時のみ表示
+      return state.disabledReorder;
+    });
+
+    /**
      * 並び替えモード開始
      */
     const startReorder = () => {
@@ -218,14 +231,18 @@ export default defineComponent({
       saveOutline,
       browsersOutline,
       //-------------
-      //method
+
+      //lifecycle
       ionViewWillEnter,
-      toEditor,
-      openUrl,
+      //reorder
       startReorder,
       finishReorder,
       cancelReorder,
       reordered,
+      //other
+      toEditor,
+      openUrl,
+      visibleAddButton,
     };
   },
 });
